@@ -8,6 +8,7 @@ package org.mule.apikit.implv2.v10.model;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toList;
 import static org.mule.apikit.ApiType.RAML;
 import static org.mule.apikit.common.RamlUtils.replaceBaseUri;
 import static org.mule.apikit.implv2.ParserV2Utils.findIncludeNodes;
@@ -15,6 +16,7 @@ import static org.mule.apikit.implv2.ParserV2Utils.nullSafe;
 import static org.mule.apikit.model.ApiVendor.RAML_10;
 
 import org.mule.apikit.ApiType;
+import org.mule.apikit.model.ApiProtocol;
 import org.mule.apikit.model.ApiSpecification;
 import org.mule.apikit.model.ApiVendor;
 import org.mule.apikit.model.Resource;
@@ -43,11 +45,13 @@ public class RamlImpl10V2 implements ApiSpecification {
   private Api api;
   private final String ramlPath;
   private final ResourceLoader resourceLoader;
+  private final List<ApiProtocol> protocols;
 
   public RamlImpl10V2(Api api, ResourceLoader resourceLoader, String ramlPath) {
     this.api = api;
     this.ramlPath = ramlPath;
     this.resourceLoader = resourceLoader;
+    protocols = api.protocols().stream().map(x -> ApiProtocol.valueOf(x.toUpperCase())).collect(toList());
   }
 
   @Override
@@ -68,6 +72,10 @@ public class RamlImpl10V2 implements ApiSpecification {
   @Override
   public String getLocation() {
     return ramlPath;
+  }
+
+  public List<ApiProtocol> getProtocols() {
+    return protocols;
   }
 
   @Override

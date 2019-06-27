@@ -9,11 +9,13 @@ package org.mule.amf.impl.model;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.mule.apikit.ApiType.AMF;
 import static org.mule.apikit.common.RamlUtils.replaceBaseUri;
 
 import org.mule.apikit.ApiType;
+import org.mule.apikit.model.ApiProtocol;
 import org.mule.apikit.model.ApiSpecification;
 import org.mule.apikit.model.ApiVendor;
 import org.mule.apikit.model.Resource;
@@ -49,6 +51,7 @@ public class AMFImpl implements ApiSpecification {
   private final WebApi webApi;
   private final Map<String, Map<String, Resource>> resources;
   private final List<String> references;
+  private final List<ApiProtocol> protocols;
   private final ApiVendor apiVendor;
   private final Document consoleModel;
   private final ApiReference apiRef;
@@ -60,6 +63,7 @@ public class AMFImpl implements ApiSpecification {
     this.apiVendor = apiVendor;
     this.consoleModel = console;
     this.apiRef = apiRef;
+    protocols = webApi.schemes().stream().map(x -> ApiProtocol.valueOf(x.value().toUpperCase())).collect(toList());
   }
 
   private Map<String, Map<String, Resource>> buildResources(final List<EndPoint> endPoints) {
@@ -104,6 +108,11 @@ public class AMFImpl implements ApiSpecification {
   @Override
   public String getLocation() {
     return apiRef.getLocation();
+  }
+
+  @Override
+  public List<ApiProtocol> getProtocols() {
+    return protocols;
   }
 
   private Optional<Server> getServer() {

@@ -8,12 +8,14 @@ package org.mule.apikit.implv1.model;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toList;
 import static org.mule.apikit.ApiType.RAML;
 import static org.mule.apikit.model.ApiVendor.RAML_08;
 
 import org.mule.apikit.ApiType;
 import org.mule.apikit.implv1.ParserV1Utils;
 import org.mule.apikit.implv1.model.parameter.ParameterImpl;
+import org.mule.apikit.model.ApiProtocol;
 import org.mule.apikit.model.ApiSpecification;
 import org.mule.apikit.model.ApiVendor;
 import org.mule.apikit.model.Resource;
@@ -23,9 +25,6 @@ import org.mule.apikit.model.parameter.Parameter;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,12 +41,13 @@ import org.slf4j.LoggerFactory;
 public class RamlImplV1 implements ApiSpecification {
 
   private Raml raml;
+  private List<ApiProtocol> protocols;
   private ResourceLoader resourceLoader;
   private String ramlPath;
   private Logger logger;
 
   public RamlImplV1(Raml raml, ResourceLoader resourceLoader, String ramlPath) {
-    this.raml = raml;
+    this(raml);
     this.resourceLoader = resourceLoader;
     this.ramlPath = ramlPath;
     this.logger = LoggerFactory.getLogger(RamlImplV1.class);
@@ -55,12 +55,22 @@ public class RamlImplV1 implements ApiSpecification {
 
   public RamlImplV1(Raml raml) {
     this.raml = raml;
+    protocols = raml.getProtocols().stream().map(x -> ApiProtocol.valueOf(x.name().toUpperCase())).collect(toList());
   }
 
   public Raml getRaml() {
     return raml;
   }
 
+  public void setBaseUri(String s) {
+    raml.setBaseUri(s);
+  }
+
+  public Object getInstance() {
+    return raml;
+  }
+
+  @Override
   public Resource getResource(String s) {
     org.raml.model.Resource resource = raml.getResource(s);
     if (resource == null) {
@@ -69,14 +79,17 @@ public class RamlImplV1 implements ApiSpecification {
     return new ResourceImpl(resource);
   }
 
+  @Override
   public Map<String, String> getConsolidatedSchemas() {
     return raml.getConsolidatedSchemas();
   }
 
+  @Override
   public Map<String, Object> getCompiledSchemas() {
     return raml.getCompiledSchemas();
   }
 
+  @Override
   public String getBaseUri() {
     return raml.getBaseUri();
   }
@@ -86,6 +99,11 @@ public class RamlImplV1 implements ApiSpecification {
     return ramlPath;
   }
 
+  public List<ApiProtocol> getProtocols() {
+    return protocols;
+  }
+
+  @Override
   public Map<String, Resource> getResources() {
     if (raml.getResources() == null) {
       return null;
@@ -97,14 +115,12 @@ public class RamlImplV1 implements ApiSpecification {
     return map;
   }
 
+  @Override
   public String getVersion() {
     return raml.getVersion();
   }
 
-  public void setBaseUri(String s) {
-    raml.setBaseUri(s);
-  }
-
+  @Override
   public Map<String, Parameter> getBaseUriParameters() {
     if (raml.getBaseUriParameters() == null) {
       return emptyMap();
@@ -116,6 +132,7 @@ public class RamlImplV1 implements ApiSpecification {
     return map;
   }
 
+  @Override
   public List<Map<String, SecurityScheme>> getSecuritySchemes() {
     if (raml.getSecuritySchemes() == null) {
       return null;
@@ -131,6 +148,7 @@ public class RamlImplV1 implements ApiSpecification {
     return list;
   }
 
+  @Override
   public List<Map<String, Template>> getTraits() {
     if (raml.getTraits() == null) {
       return null;
@@ -146,16 +164,14 @@ public class RamlImplV1 implements ApiSpecification {
     return list;
   }
 
+  @Override
   public String getUri() {
     return raml.getUri();
   }
 
+  @Override
   public List<Map<String, String>> getSchemas() {
     return raml.getSchemas();
-  }
-
-  public Object getInstance() {
-    return raml;
   }
 
   @Override
@@ -192,4 +208,5 @@ public class RamlImplV1 implements ApiSpecification {
   public ApiType getType() {
     return RAML;
   }
+
 }
