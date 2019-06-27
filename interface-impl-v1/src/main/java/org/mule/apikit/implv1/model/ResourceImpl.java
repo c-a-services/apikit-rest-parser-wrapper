@@ -29,6 +29,7 @@ public class ResourceImpl implements Resource {
     this.resource = resource;
   }
 
+  @Override
   public Action getAction(String s) {
     org.raml.model.Action action = resource.getAction(s);
     if (action == null) {
@@ -48,10 +49,12 @@ public class ResourceImpl implements Resource {
     return resolveVersion(getUri(), version);
   }
 
+  @Override
   public void setParentUri(String s) {
     resource.setParentUri(s);
   }
 
+  @Override
   public Map<String, Resource> getResources() {
     if (resource.getResources() == null) {
       return null;
@@ -63,10 +66,12 @@ public class ResourceImpl implements Resource {
     return map;
   }
 
+  @Override
   public String getParentUri() {
     return resource.getParentUri();
   }
 
+  @Override
   public Map<ActionType, Action> getActions() {
     if (resource.getActions() == null) {
       return null;
@@ -78,6 +83,7 @@ public class ResourceImpl implements Resource {
     return map;
   }
 
+  @Override
   public Map<String, List<Parameter>> getBaseUriParameters() {
     if (resource.getBaseUriParameters() == null) {
       return null;
@@ -93,8 +99,34 @@ public class ResourceImpl implements Resource {
     return map;
   }
 
+  @Override
   public Map<String, Parameter> getResolvedUriParameters() {
     return loadResolvedUriParameters(resource);
+  }
+
+  @Override
+  public String getDisplayName() {
+    return resource.getDisplayName();
+  }
+
+  @Override
+  public String getDescription() {
+    return resource.getDescription();
+  }
+
+  @Override
+  public String getRelativeUri() {
+    return resource.getRelativeUri();
+  }
+
+  @Override
+  public void cleanBaseUriParameters() {
+    resource.getBaseUriParameters().clear();
+  }
+
+  @Override
+  public String toString() {
+    return getUri();
   }
 
   static Map<String, Parameter> loadResolvedUriParameters(org.raml.model.Resource resource) {
@@ -108,20 +140,4 @@ public class ResourceImpl implements Resource {
     return map;
   }
 
-  public String getDisplayName() {
-    return resource.getDisplayName();
-  }
-
-  public String getRelativeUri() {
-    return resource.getRelativeUri();
-  }
-
-  public void cleanBaseUriParameters() {
-    resource.getBaseUriParameters().clear();
-  }
-
-  @Override
-  public String toString() {
-    return getUri();
-  }
 }

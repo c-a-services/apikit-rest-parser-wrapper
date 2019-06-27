@@ -63,18 +63,6 @@ public class ResourceImpl implements Resource {
     return actions;
   }
 
-  private static Map<ActionType, Action> loadActions(org.raml.v2.api.model.v08.resources.Resource resource) {
-    Map<ActionType, Action> map = new LinkedHashMap<>();
-    for (Method method : resource.methods()) {
-      map.put(getActionKey(method.method()), new ActionImpl(method));
-    }
-    return map;
-  }
-
-  private static ActionType getActionKey(String method) {
-    return ActionType.valueOf(method.toUpperCase());
-  }
-
   @Override
   public Map<String, Resource> getResources() {
     Map<String, Resource> result = new HashMap<>();
@@ -90,24 +78,17 @@ public class ResourceImpl implements Resource {
   }
 
   @Override
+  public String getDescription() {
+    return resource.description() != null ? resource.description().value() : null;
+  }
+
+  @Override
   public Map<String, Parameter> getResolvedUriParameters() {
     if (resolvedUriParameters == null) {
       resolvedUriParameters = loadResolvedUriParameters(resource);
     }
 
     return resolvedUriParameters;
-  }
-
-  static Map<String, Parameter> loadResolvedUriParameters(org.raml.v2.api.model.v08.resources.Resource resource) {
-    Map<String, Parameter> result = new HashMap<>();
-    org.raml.v2.api.model.v08.resources.Resource current = resource;
-    while (current != null) {
-      for (org.raml.v2.api.model.v08.parameters.Parameter parameter : current.uriParameters()) {
-        result.put(parameter.name(), new ParameterImpl(parameter));
-      }
-      current = current.parentResource();
-    }
-    return result;
   }
 
   @Override
@@ -129,4 +110,29 @@ public class ResourceImpl implements Resource {
   public String toString() {
     return getUri();
   }
+
+  static Map<String, Parameter> loadResolvedUriParameters(org.raml.v2.api.model.v08.resources.Resource resource) {
+    Map<String, Parameter> result = new HashMap<>();
+    org.raml.v2.api.model.v08.resources.Resource current = resource;
+    while (current != null) {
+      for (org.raml.v2.api.model.v08.parameters.Parameter parameter : current.uriParameters()) {
+        result.put(parameter.name(), new ParameterImpl(parameter));
+      }
+      current = current.parentResource();
+    }
+    return result;
+  }
+
+  private static Map<ActionType, Action> loadActions(org.raml.v2.api.model.v08.resources.Resource resource) {
+    Map<ActionType, Action> map = new LinkedHashMap<>();
+    for (Method method : resource.methods()) {
+      map.put(getActionKey(method.method()), new ActionImpl(method));
+    }
+    return map;
+  }
+
+  private static ActionType getActionKey(String method) {
+    return ActionType.valueOf(method.toUpperCase());
+  }
+
 }

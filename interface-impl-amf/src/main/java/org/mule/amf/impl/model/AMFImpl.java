@@ -111,6 +111,16 @@ public class AMFImpl implements ApiSpecification {
   }
 
   @Override
+  public String getTitle() {
+    return webApi.name().nonEmpty() ? webApi.name().value() : null;
+  }
+
+  @Override
+  public String getDescription() {
+    return webApi.description().nonEmpty() ? webApi.description().value() : null;
+  }
+
+  @Override
   public List<ApiProtocol> getProtocols() {
     return protocols;
   }
@@ -118,7 +128,6 @@ public class AMFImpl implements ApiSpecification {
   private Optional<Server> getServer() {
     return webApi.servers().stream().findFirst();
   }
-
 
   @Override
   public Map<String, Resource> getResources() {

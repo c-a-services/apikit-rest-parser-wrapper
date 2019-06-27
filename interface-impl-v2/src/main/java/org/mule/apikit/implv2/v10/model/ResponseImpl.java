@@ -59,6 +59,11 @@ public class ResponseImpl implements Response {
   }
 
   @Override
+  public String getDescription() {
+    return response.description() != null ? response.description().value() : null;
+  }
+
+  @Override
   public void setBody(Map<String, MimeType> body) {
     throw new UnsupportedOperationException();
   }

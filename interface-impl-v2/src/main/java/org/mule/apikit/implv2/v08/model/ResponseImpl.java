@@ -40,14 +40,6 @@ public class ResponseImpl implements Response {
     return body;
   }
 
-  private static Map<String, MimeType> loadBody(org.raml.v2.api.model.v08.bodies.Response response) {
-    Map<String, MimeType> result = new LinkedHashMap<>();
-    for (BodyLike bodyLike : response.body()) {
-      result.put(bodyLike.name(), new MimeTypeImpl(bodyLike));
-    }
-    return result;
-  }
-
   @Override
   public Map<String, Parameter> getHeaders() {
     final Map<String, Parameter> result = new LinkedHashMap<>();
@@ -56,6 +48,11 @@ public class ResponseImpl implements Response {
         .ifPresent(headers -> headers.forEach(header -> result.put(header.name(), new ParameterImpl(header))));
 
     return result;
+  }
+
+  @Override
+  public String getDescription() {
+    return response.description() != null ? response.description().value() : null;
   }
 
   @Override
@@ -71,5 +68,13 @@ public class ResponseImpl implements Response {
   @Override
   public Object getInstance() {
     throw new UnsupportedOperationException();
+  }
+
+  private static Map<String, MimeType> loadBody(org.raml.v2.api.model.v08.bodies.Response response) {
+    Map<String, MimeType> result = new LinkedHashMap<>();
+    for (BodyLike bodyLike : response.body()) {
+      result.put(bodyLike.name(), new MimeTypeImpl(bodyLike));
+    }
+    return result;
   }
 }

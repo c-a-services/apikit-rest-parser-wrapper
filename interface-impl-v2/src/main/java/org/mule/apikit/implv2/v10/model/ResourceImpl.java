@@ -93,6 +93,11 @@ public class ResourceImpl implements Resource {
   }
 
   @Override
+  public String getDescription() {
+    return nullSafe(resource.description());
+  }
+
+  @Override
   public Map<String, Parameter> getResolvedUriParameters() {
     if (resolvedUriParameters == null) {
       resolvedUriParameters = loadResolvedUriParameters(resource);

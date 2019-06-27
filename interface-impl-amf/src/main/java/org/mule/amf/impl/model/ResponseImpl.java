@@ -40,6 +40,11 @@ public class ResponseImpl implements Response {
   }
 
   @Override
+  public String getDescription() {
+    return response.description().nonEmpty() ? response.description().value() : null;
+  }
+
+  @Override
   public void setBody(Map<String, MimeType> body) {
 
   }

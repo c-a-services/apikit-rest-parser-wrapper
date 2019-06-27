@@ -88,6 +88,11 @@ public class ResourceImpl implements Resource {
   }
 
   @Override
+  public String getDescription() {
+    return endPoint.description().nonEmpty() ? endPoint.description().value() : null;
+  }
+
+  @Override
   public Map<String, Parameter> getResolvedUriParameters() {
     if (resolvedUriParameters == null) {
       resolvedUriParameters = loadResolvedUriParameters(endPoint);

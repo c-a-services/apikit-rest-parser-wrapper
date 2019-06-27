@@ -21,6 +21,8 @@ public interface Response {
 
   Map<String, Parameter> getHeaders();
 
+  String getDescription();
+
   void setBody(Map<String, MimeType> body);
 
   void setHeaders(Map<String, Parameter> headers);

@@ -25,6 +25,10 @@ public interface ApiSpecification extends Serializable {
 
   String getLocation();
 
+  String getTitle();
+
+  String getDescription();
+
   List<ApiProtocol> getProtocols();
 
   Map<String, Resource> getResources();

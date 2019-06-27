@@ -74,6 +74,17 @@ public class RamlImpl10V2 implements ApiSpecification {
     return ramlPath;
   }
 
+  @Override
+  public String getTitle() {
+    return nullSafe(api.title());
+  }
+
+  @Override
+  public String getDescription() {
+    return nullSafe(api.description());
+  }
+
+  @Override
   public List<ApiProtocol> getProtocols() {
     return protocols;
   }

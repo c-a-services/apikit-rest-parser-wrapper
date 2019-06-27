@@ -99,6 +99,17 @@ public class RamlImplV1 implements ApiSpecification {
     return ramlPath;
   }
 
+  @Override
+  public String getTitle() {
+    return raml.getTitle();
+  }
+
+  @Override
+  public String getDescription() {
+    return null;
+  }
+
+  @Override
   public List<ApiProtocol> getProtocols() {
     return protocols;
   }

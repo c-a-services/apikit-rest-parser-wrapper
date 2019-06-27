@@ -33,6 +33,8 @@ public interface Resource {
 
   String getDisplayName();
 
+  String getDescription();
+
   String getRelativeUri();
 
   void cleanBaseUriParameters();

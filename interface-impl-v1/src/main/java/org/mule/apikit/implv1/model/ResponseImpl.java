@@ -25,6 +25,7 @@ public class ResponseImpl implements Response {
     this.response = response;
   }
 
+  @Override
   public Map<String, MimeType> getBody() {
     if (response.getBody() == null) {
       return null;
@@ -36,10 +37,12 @@ public class ResponseImpl implements Response {
     return map;
   }
 
+  @Override
   public boolean hasBody() {
     return response.hasBody();
   }
 
+  @Override
   public Map<String, Parameter> getHeaders() {
     final Map<String, Parameter> map = new LinkedHashMap<>();
 
@@ -49,6 +52,12 @@ public class ResponseImpl implements Response {
     return map;
   }
 
+  @Override
+  public String getDescription() {
+    return response.getDescription();
+  }
+
+  @Override
   public void setBody(Map<String, MimeType> body) {
     Map<String, org.raml.model.MimeType> map = new LinkedHashMap<String, org.raml.model.MimeType>();
     for (Map.Entry<String, MimeType> entry : body.entrySet()) {
@@ -57,6 +66,7 @@ public class ResponseImpl implements Response {
     response.setBody(map);
   }
 
+  @Override
   public void setHeaders(Map<String, Parameter> headers) {
     Map<String, Header> map = new LinkedHashMap<String, Header>();
     for (Map.Entry<String, Parameter> entry : headers.entrySet()) {
@@ -65,6 +75,7 @@ public class ResponseImpl implements Response {
     response.setHeaders(map);
   }
 
+  @Override
   public Object getInstance() {
     return response;
   }
